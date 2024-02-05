@@ -78,5 +78,24 @@ This function performs text-to-speech using the Speech Synthesis API. It checks 
 
 TensorFlow.js Initialization Function:
 This function initializes TensorFlow.js for pose recognition using a pre-trained model. It loads the model and metadata, sets up a webcam, and initializes the canvas for video display.
+..........................................................................................................................................................................................................................................................................
+loop(timestamp):
+This is an asynchronous function that serves as the main loop for the application.
+It updates the webcam frame using the webcam.update() function.
+It awaits the predict() function, which involves estimating a pose using the PoseNet model and making predictions using a Teachable Machine classification model.
+The window.requestAnimationFrame(loop) is used to schedule the next iteration of the loop.
 
+predict():
+This asynchronous function involves two main predictions:
+	It uses the PoseNet model to estimate a pose from the webcam's canvas.
+	It then uses a Teachable Machine classification model to make predictions based on the output from PoseNet.
+The function iterates through the predictions, and if the probability of a prediction is exactly 1.00, it performs the following actions:
+	Checks if the predicted class is different from the last displayed line on the webpage (#last-line element).
+	Calls addNewTranslateLine(prediction[i].className) to add a new translated line to the webpage.
+	If a button (gttsBtn) is active (based on its background color), it calls the tts(prediction[i].className) function for text-to-speech.
+It also calls drawPose(pose) to draw the estimated pose on the canvas.
 
+drawPose(pose):
+This function draws the keypoints and skeleton of the estimated pose on the canvas using the HTML5 canvas drawing context (ctx).
+It checks if the webcam canvas is available and, if so, draws the keypoints and skeleton of the estimated pose using the tmPose.drawKeypoints and tmPose.drawSkeleton functions.
+____________________________________________________________________________________________________________________________________
