@@ -15,3 +15,20 @@ translateCard.addEventListener("click", function() {
 learnCard.addEventListener("click", function() {
     window.location = 'learn.html';
 })
+
+contactUsCard.addEventListener("click", function() {
+    window.location = 'contact.html';
+})
+contributeCard.addEventListener("click", function() {
+    window.location = 'https://github.com/madhav2k22/SignTalk.git';
+})
+
+//bottom nav
+navTranslteBtn.addEventListener("click", function() {
+    window.location = '/translate'
+})
+navSettingsBtn.addEventListener("click", function() {
+    navHomeBtn.classList.remove("active-nav-btn");
+    navSettingsBtn.classList.add("active-nav-btn")
+    window.location = '/settings'
+})
