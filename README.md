@@ -62,7 +62,7 @@ This repository contains Python code for two related projects: a hand gesture da
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/hand-gesture-recognition.git
+   git clone https://github.com/Nepal-College-of-Information-Technology/ai-mini-project-pands
    ```
 
 2. Install the required libraries:
