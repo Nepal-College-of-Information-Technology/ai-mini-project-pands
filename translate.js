@@ -153,5 +153,61 @@ async function init() {
     //     para.className = "line";
     //     labelContainer.appendChild(para);
     // }
-
 }
+
+async function loop(timestamp) {
+    webcam.update(); // update the webcam frame
+    await predict();
+    window.requestAnimationFrame(loop);
+}
+
+async function predict() {
+    // Prediction #1: run input through posenet
+    // estimatePose can take in an image, video or canvas html element
+    const {
+        pose,
+        posenetOutput
+    } = await model.estimatePose(webcam.canvas);
+    // Prediction 2: run input through teachable machine classification model
+    const prediction = await model.predict(posenetOutput);
+
+    for (let i = 0; i < maxPredictions; i++) {
+        // if (prediction[i].probability.toFixed(2) == 1.00) {
+        //     console.log(prediction[i].probability.toFixed(2), prediction[i].className)
+        // }
+        // const classPrediction =  prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+        if (prediction[i].probability.toFixed(2) == 1.00) {
+            if (document.querySelector('#last-line').innerHTML != prediction[i].className) {
+                await addNewTranslateLine(prediction[i].className);
+                if (gttsBtn.style.backgroundColor === 'rgb(212, 236, 126)') { //btn active
+                    await tts(prediction[i].className)
+                    // delay(0)
+                } else {
+                    console.log('')
+                }
+            }
+
+            // labelContainer.childNodes[i].innerHTML = prediction[i].className;
+
+            
+        }
+
+    }
+
+    // finally draw the poses
+    drawPose(pose);
+}
+
+function drawPose(pose) {
+    if (webcam.canvas) {
+        ctx.drawImage(webcam.canvas, 0, 0);
+        // draw the keypoints and skeleton
+        if (pose) {
+            const minPartConfidence = 0.5; //0.5
+            tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
+            tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
+        }
+    }
+}
+
+
